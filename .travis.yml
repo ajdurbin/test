@@ -10,8 +10,12 @@ script:
  - python -m pytest -v
 after_success:
  - echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
- - export REPO=$DOCKER_USER/test
+ - export APP=test
+ - echo $APP
+ - export REPO=$DOCKER_USER/$APP
+ - echo $REPO
  - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
+ - echo $TAG
  - docker build -f Dockerfile -t $REPO:$COMMIT .
  - docker tag $REPO:$COMMIT $REPO:$TAG
  - docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS_BUILD_NUMBER
